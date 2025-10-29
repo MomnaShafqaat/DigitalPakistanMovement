@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { protestAPI } from '../services/api';
 
 const ProtestList = ({ user }) => {
@@ -9,6 +9,7 @@ const ProtestList = ({ user }) => {
     city: '',
     cause: ''
   });
+  const location = useLocation();
   const fetchProtests = async () => {
     try {
       const response = await protestAPI.getProtests(filters);
@@ -76,6 +77,11 @@ useEffect(() => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {location.state?.created && (
+          <div className="mb-6 bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded">
+            Your protest has been submitted and is pending admin approval. It will appear here once approved.
+          </div>
+        )}
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <div className="lg:w-1/4">
@@ -132,7 +138,9 @@ useEffect(() => {
 
             {protests.length === 0 ? (
               <div className="card p-8 text-center">
-                <div className="text-6xl mb-4">🔍</div>
+                <div className="mb-4 flex justify-center">
+                  <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
+                </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">No protests found</h3>
                 <p className="text-gray-600 mb-4">
                   {filters.city || filters.cause 
@@ -160,19 +168,19 @@ useEffect(() => {
                     
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center text-sm text-gray-500">
-                        <span className="mr-2">📍</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                         <span className="capitalize">{protest.city.replace('_', ' ')}</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-500">
-                        <span className="mr-2">📅</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
                         <span>{new Date(protest.start_datetime).toLocaleDateString()}</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-500">
-                        <span className="mr-2">🎯</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><circle cx="12" cy="12" r="10"/><path d="M22 12H18"/><path d="M12 2v6"/></svg>
                         <span className="capitalize">{protest.cause.replace('_', ' ')}</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-500">
-                        <span className="mr-2">👥</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><path d="M16 21v-2a4 4 0 00-8 0v2"/><circle cx="12" cy="7" r="4"/></svg>
                         <span>{protest.supporter_count} supporters</span>
                       </div>
                     </div>

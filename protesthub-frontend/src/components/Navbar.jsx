@@ -12,7 +12,10 @@ const Navbar = ({ user, onLogout }) => {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
-              <span className="text-2xl">🇵🇰</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-white">
+                <circle cx="12" cy="12" r="10" className="text-white/20" fill="currentColor"/>
+                <path d="M12 6a6 6 0 100 12 6 6 0 000-12z" fill="#10B981"/>
+              </svg>
               <span className="text-white font-bold text-xl">Digital Pakistan Movement</span>
             </Link>
           </div>
@@ -40,7 +43,10 @@ const Navbar = ({ user, onLogout }) => {
                   to="/create-blog" 
                   className={`nav-link ${location.pathname === '/create-blog' ? 'bg-green-700 text-white' : 'text-green-100 hover:bg-green-700'}`}
                 >
-                  📝 Write Blog
+                  <span className="inline-flex items-center gap-2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                    Write Blog
+                  </span>
                 </Link>
                 
                 {/* Only organizers and admins can create protests */}
@@ -49,7 +55,10 @@ const Navbar = ({ user, onLogout }) => {
                     to="/create-protest" 
                     className={`nav-link ${location.pathname === '/create-protest' ? 'bg-green-700 text-white' : 'text-green-100 hover:bg-green-700'}`}
                   >
-                    🗣️ Create Protest
+                    <span className="inline-flex items-center gap-2">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 11V7a4 4 0 014-4h6"/><path d="M7 15h2"/><path d="M7 19h4"/><path d="M15 8h6v8a2 2 0 01-2 2h-4z"/></svg>
+                      Create Protest
+                    </span>
                   </Link>
                 )}
               </>
@@ -61,7 +70,7 @@ const Navbar = ({ user, onLogout }) => {
                   to="/profile" 
                   className={`nav-link ${location.pathname === '/profile' ? 'bg-green-700 text-white' : 'text-green-100 hover:bg-green-700'}`}
                 >
-                  👤 {user.username} ({user.role})
+                  profile {user.username} ({user.role})
                 </Link>
                 <button 
                   onClick={onLogout}

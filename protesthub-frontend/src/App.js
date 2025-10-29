@@ -9,37 +9,63 @@ import ProtestDetail from './pages/ProtestDetail';
 import CreateProtest from './pages/CreateProtest';
 import CreateBlogPost from './pages/CreateBlogPost';
 import BlogList from './pages/BlogList';
-import UserProfile from './pages/UserProfile';
+import ProfileEdit from './pages/ProfileEdit';
+// In App.js - update the imports and routes
+import ProfileView from './pages/ProfileView';
 import { authAPI } from './services/api';
 import './index.css';
-
-
-
-
 import BlogDetail from './pages/BlogDetail';
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
-
+  // Single function to check auth status
   const checkAuthStatus = async () => {
     try {
       const token = localStorage.getItem('token');
-      if (token) {
+      const userData = localStorage.getItem('user');
+      
+      if (token && userData) {
+        // Use the user data from localStorage (updated by profile updates)
+        setUser(JSON.parse(userData));
+      } else if (token) {
+        // Fallback: if we have token but no user data, fetch from API
         const response = await authAPI.getProfile();
         setUser(response.data);
+        localStorage.setItem('user', JSON.stringify(response.data));
       }
     } catch (error) {
       console.error('Auth check failed:', error);
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setUser(null);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
+  // Single useEffect for storage changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        console.log('Storage changed, updating user state');
+        setUser(JSON.parse(userData));
+      }
+    };
+
+    // Listen for storage changes (when profile updates)
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   const login = (userData, token) => {
     setUser(userData);
@@ -57,6 +83,12 @@ function App() {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
     }
+  };
+
+  // Function to update user state from child components
+  const updateUser = (userData) => {
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
   };
 
   if (loading) {
@@ -80,24 +112,39 @@ function App() {
             <Route path="/protests/:id" element={<ProtestDetail user={user} />} />
             
             {/* Protest creation - only for organizers and admins */}
-            <Route 
-              path="/create-protest" 
-              element={
-                user && (user.role === 'organizer' || user.role === 'admin') 
-                  ? <CreateProtest user={user} /> 
-                  : <Navigate to="/protests" />
-              } 
-            />
+                  <Route 
+            path="/create-protest" 
+            element={
+              user && (user.role === 'organizer' || user.role === 'admin') 
+                ? <CreateProtest user={user} /> 
+                : <Navigate to="/protests" />
+            } 
+          />
             
             {/* Blog creation - for all authenticated users */}
-            <Route 
-              path="/create-blog" 
-              element={user ? <CreateBlogPost user={user} /> : <Navigate to="/login" />} 
-            />
+  <Route 
+    path="/create-blog" 
+    element={user ? <CreateBlogPost user={user} /> : <Navigate to="/login" />} 
+  />
             
-<Route path="/awareness/:id" element={<BlogDetail user={user} />} />  
+            <Route path="/awareness/:id" element={<BlogDetail user={user} />} />  
             <Route path="/awareness" element={<BlogList user={user} />} />
-            <Route path="/profile" element={user ? <UserProfile user={user} /> : <Navigate to="/login" />} />
+            
+            {/* Pass updateUser function to UserProfile */}
+  <Route 
+    path="/profile" 
+    element={
+      user ? <ProfileView user={user} /> 
+      : <Navigate to="/login" />
+    } 
+  />
+  <Route 
+    path="/profile/edit" 
+    element={
+      user ? <ProfileEdit user={user} setUser={updateUser} /> 
+      : <Navigate to="/login" />
+    } 
+  />
           </Routes>
         </main>
       </div>

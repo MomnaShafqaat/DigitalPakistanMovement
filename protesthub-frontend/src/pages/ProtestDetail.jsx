@@ -86,20 +86,26 @@ const ProtestDetail = ({ user }) => {
                   : 'border border-green-600 text-green-600 hover:bg-green-600 hover:text-white'
               } disabled:opacity-50`}
             >
-              {supporting ? '...' : protest.is_supported ? '✅ Supported' : '🤝 Support Protest'}
+              {supporting ? '...' : protest.is_supported ? 'Supported' : 'Support Protest'}
             </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             <div className="space-y-4">
               <div className="bg-green-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-green-800 mb-2">📍 Location</h3>
+                <h3 className="font-semibold text-green-800 mb-2 inline-flex items-center gap-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Location
+                </h3>
                 <p className="text-green-700 capitalize">{protest.city}</p>
                 <p className="text-green-700">{protest.specific_location}</p>
               </div>
 
               <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-blue-800 mb-2">📅 Date & Time</h3>
+                <h3 className="font-semibold text-blue-800 mb-2 inline-flex items-center gap-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  Date & Time
+                </h3>
                 <p className="text-blue-700">
                   {new Date(protest.start_datetime).toLocaleString()}
                 </p>
@@ -108,12 +114,18 @@ const ProtestDetail = ({ user }) => {
 
             <div className="space-y-4">
               <div className="bg-purple-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-purple-800 mb-2">🎯 Cause</h3>
+                <h3 className="font-semibold text-purple-800 mb-2 inline-flex items-center gap-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M22 12H18"/><path d="M12 2v6"/></svg>
+                  Cause
+                </h3>
                 <p className="text-purple-700 capitalize">{protest.cause.replace('_', ' ')}</p>
               </div>
 
               <div className="bg-orange-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-orange-800 mb-2">👥 Participation</h3>
+                <h3 className="font-semibold text-orange-800 mb-2 inline-flex items-center gap-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 00-8 0v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  Participation
+                </h3>
                 <p className="text-orange-700">
                   {protest.supporter_count} supporters • {protest.expected_participants} expected
                 </p>
@@ -128,7 +140,10 @@ const ProtestDetail = ({ user }) => {
 
           {protest.safety_guidelines && (
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8">
-              <h3 className="text-lg font-semibold text-yellow-800 mb-3">🛡️ Safety Guidelines</h3>
+              <h3 className="text-lg font-semibold text-yellow-800 mb-3 inline-flex items-center gap-2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Safety Guidelines
+              </h3>
               <p className="text-yellow-700 whitespace-pre-line">{protest.safety_guidelines}</p>
             </div>
           )}

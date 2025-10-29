@@ -15,8 +15,9 @@ api.interceptors.request.use(
       config.headers.Authorization = `Token ${token}`;
     }
     
-    // Add content type for JSON
-    if (!config.headers['Content-Type']) {
+    // Add content type for JSON unless sending FormData (browser will set boundary)
+    const isFormData = typeof FormData !== 'undefined' && config.data instanceof FormData;
+    if (!isFormData && !config.headers['Content-Type']) {
       config.headers['Content-Type'] = 'application/json';
     }
     
@@ -45,6 +46,7 @@ export const authAPI = {
   register: (userData) => api.post('/auth/register/', userData),
   logout: () => api.post('/auth/logout/'),
   getProfile: () => api.get('/auth/profile/'),
+  updateProfile: (profileData) => api.put('/auth/profile/', profileData),
 };
 
 export const protestAPI = {

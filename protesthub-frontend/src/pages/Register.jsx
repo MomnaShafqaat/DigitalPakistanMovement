@@ -9,7 +9,8 @@ const Register = ({ onLogin }) => {
     password: '',
     password2: '', // Changed from confirmPassword to password2
     city: '',
-    phone_number: ''
+    phone_number: '',
+    role: 'user'
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -69,11 +70,19 @@ const Register = ({ onLogin }) => {
     { value: 'quetta', label: 'Quetta' },
   ];
 
+  const roles = [
+    { value: 'user', label: 'Regular User - Can write blogs and support protests' },
+    { value: 'organizer', label: 'Organizer - Can create protests and write blogs' },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <span className="text-4xl">🇵🇰</span>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" className="text-green-600">
+            <circle cx="12" cy="12" r="10" className="text-green-600/10" fill="currentColor"/>
+            <path d="M12 6a6 6 0 100 12 6 6 0 000-12z" fill="#10B981"/>
+          </svg>
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Create your account
@@ -92,6 +101,29 @@ const Register = ({ onLogin }) => {
           )}
           
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* Role Selection */}
+            <div>
+              <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                Account Type *
+              </label>
+              <select
+                id="role"
+                name="role"
+                required
+                value={formData.role}
+                onChange={handleChange}
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 rounded-md"
+              >
+                {roles.map(role => (
+                  <option key={role.value} value={role.value}>
+                    {role.label}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-1 text-sm text-gray-500">
+                Organizers can create protests and awareness posts
+              </p>
+            </div>
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-700">
                 Username
