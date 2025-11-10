@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'updates',      # Live protest updates
 
     'django_filters',
+    'cloudinary',
+    'cloudinary_storage'
 ]
 
 # Middleware - processes requests/responses
@@ -243,3 +245,7 @@ SOCIALACCOUNT_STORE_TOKENS = True
 
 # Login redirect
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+MEDIA_URL = '/media/'  
+

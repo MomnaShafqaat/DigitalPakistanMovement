@@ -37,6 +37,19 @@ class CustomUser(AbstractUser):
     city = models.CharField(max_length=100, choices=PAKISTAN_CITIES, blank=True)
     bio = models.TextField(blank=True, verbose_name="About Me")
     phone_number = models.CharField(max_length=15, blank=True, verbose_name="Phone Number")
+    organization_name = models.CharField(max_length=200, blank=True, verbose_name="Organization / Group Name")
+    contact_person = models.CharField(max_length=200, blank=True, verbose_name="Organizer’s Name")
+    cause_focus = models.CharField(max_length=100, blank=True, verbose_name="Cause / Focus Area")
+    mission = models.TextField(blank=True, verbose_name="Short Description / Mission")
+    ROLE_TYPE_CHOICES = [
+        ('organizer', 'Organizer'),
+        ('volunteer_team', 'Volunteer Team'),
+        ('awareness_group', 'Awareness Group'),
+    ]
+    organization_role_type = models.CharField(max_length=50, choices=ROLE_TYPE_CHOICES, blank=True)
+    previous_activities = models.TextField(blank=True, verbose_name="Previous Activities")
+    profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True, verbose_name="Logo / Profile Image")
+    banner_image = models.ImageField(upload_to='profile_banners/', blank=True, null=True, verbose_name="Background Banner Image")
     
     # Pakistani ID Information (optional)
     cnic_number = models.CharField(max_length=15, blank=True, verbose_name="CNIC Number")
@@ -54,6 +67,12 @@ class CustomUser(AbstractUser):
     # Social Media Links (for organizers)
     facebook_url = models.URLField(blank=True, verbose_name="Facebook Profile")
     twitter_url = models.URLField(blank=True, verbose_name="Twitter Profile")
+    instagram_url = models.URLField(blank=True, verbose_name="Instagram Profile")
+    website_url = models.URLField(blank=True, verbose_name="Website")
+
+    # Safety and Conduct
+    responsible_person = models.CharField(max_length=200, blank=True, verbose_name="Responsible Person")
+    undertaking_agreed = models.BooleanField(default=False, verbose_name="Agreed to Peaceful Conduct Undertaking")
     
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)

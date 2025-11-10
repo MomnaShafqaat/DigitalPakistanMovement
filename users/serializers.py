@@ -6,16 +6,24 @@ from .models import CustomUser
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'email', 'role', 'city', 'bio', 'phone_number')
+        fields = (
+            'id', 'username', 'email', 'role', 'city', 'bio', 'phone_number',
+            'organization_name', 'contact_person', 'cause_focus', 'mission',
+            'organization_role_type', 'previous_activities',
+            'profile_image', 'banner_image',
+            'facebook_url', 'twitter_url', 'instagram_url', 'website_url',
+            'responsible_person', 'undertaking_agreed'
+        )
         read_only_fields = ('id', 'role')
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
+    role = serializers.ChoiceField(choices=CustomUser.ROLE_CHOICES, required=False, default='user')
     
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'password', 'password2', 'city', 'phone_number')
+        fields = ('username', 'email', 'password', 'password2', 'city', 'phone_number', 'role')
     
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -33,6 +41,11 @@ class RegisterSerializer(serializers.ModelSerializer):
             city=validated_data.get('city', ''),
             phone_number=validated_data.get('phone_number', '')
         )
+        # Set role if provided (defaults to 'user')
+        role = validated_data.get('role')
+        if role:
+            user.role = role
+            user.save(update_fields=['role'])
         return user
 
 class LoginSerializer(serializers.Serializer):

@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions, status
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
@@ -10,6 +11,7 @@ from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
     
     def get_object(self):
         return self.request.user
@@ -20,10 +22,6 @@ def register_view(request):
     serializer = RegisterSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
-        
-        # AUTO-PROMOTE: Make all new users organizers for testing
-        user.role = 'organizer'
-        user.save()
         
         token, created = Token.objects.get_or_create(user=user)
         return Response({
